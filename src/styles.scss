@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background: #ececec !important;
+}
+
+@mixin position($top:auto,$right:auto,$bottom:auto,$left:auto){
+    position: absolute;
+    top:$top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+@mixin circle($length,$backgroundColor:inherit){
+    border-radius: 50%;
+    height: $length;
+    width: $length;
+}
+$dark:rgba(0,0,0,0.1);
+$wordsColor:rgba(0,0,0,0.5);
+$backgroundColor:#ececec;
+/*部件1样式*/
+.component-one{
+    width: 100%;
+    overflow: auto;
+    background-color: white;
+    &>.item{
+        float: left;
+        width: 20%;
+        height: 90px;
+        padding: 10px 0;
+        &>.pic{
+          display: block;
+          margin: auto;
+          background: beige;
+          @include circle(50px,$wordsColor);
+        }
+        &>p{
+            text-align: center;
+            color: $wordsColor;
+            padding-top: 5px;
+        }
+    }
+  }
