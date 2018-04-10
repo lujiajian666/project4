@@ -1,0 +1,28 @@
+.container>div{
+    box-sizing: border-box;
+    border-right: 1px solid black;
+    height: 100vh;
+}
+.template{
+    line-height: 20px;
+    text-align: center;
+    width: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.3);   
+}
+.list-award{
+    color: #ff7700;
+}
+.list-pic{
+    height: 40px;
+}
+.container-phone{
+    width:50%;
+    margin:auto;
+}
+.align-center{
+    text-align: center
+}
+.component{
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
