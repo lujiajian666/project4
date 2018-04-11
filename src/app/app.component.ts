@@ -64,10 +64,15 @@ export class AppComponent {
     console.log("重新渲染")
     this._templateArr = change;
     this.renderHtml = "";
+    //渲染模板
     this._templateArr.forEach((item, index) => {
       this.renderHtml += item.render(index);
     })
     document.getElementById("container-phone-screen").innerHTML = this.renderHtml;
+    //绑定函数
+    this._templateArr.forEach((item, index) => {
+      item.bindFunc();
+    })
   }
   
 
@@ -75,17 +80,16 @@ export class AppComponent {
   //组件数组处理
   handleData(event) {
     const target = event.target;
-    console.log(target);
+    //console.log(target);
     /*//确定selectIndex，知道选中哪个组件
     const parent=findSpecialParent("data-id", target);
     console.log(parent);
     this.selectIndex=parseInt(parent.getAttribute("data-id"));*/
     findSpecialParent("data-id",target,this.selectIndex);
     //把该组件的data转为数组，方便输出
-    this.selectData=this.templateArr[this.selectIndex]['data'].map((item,index,array)=>{
-        return item=objToArr(item);
-    });
-
+    const dataIndex=event.currentTarget.getAttribute("data-index");
+    this.selectData=objToArr(this.templateArr[this.selectIndex]['data'][dataIndex]);
+    console.error(this.selectData)
     console.log("选中第" + this.selectIndex + "个组件")
   }
   //重新渲染某个组件的函数
@@ -110,7 +114,7 @@ export class AppComponent {
 //公共函数
 export const findSpecialParent =(attribute, child,select)=>{
   let parent = child.parentNode;
-  console.log(parent)
+  //console.log(parent)
   if (parent && parent.hasAttribute) {
     if (parent.hasAttribute(attribute)) {
       select=parent.getAttribute(attribute);

@@ -19,16 +19,16 @@
     <!--部件具体数据-->
     <div class="container-data">
       <ng-template [ngIf]="templateArr.length>0">
-        <section class="data-block" *ngFor="let item of selectData;let key=index">
-            <div *ngFor="let item2 of item;" nz-row>
+        <section class="data-block">
+            <div *ngFor="let item of selectData;" nz-row>
                   <p [nzSpan]=5 nz-col>
-                    {{item2[0]}}
+                    {{item[0]}}
                   </p>
                   <p [nzSpan]=1 nz-col>
                     :
                   </p>
                   <div nz-col [nzSpan]=10>
-                    <input nz-input (input)="renderComponent()" [(ngModel)]="templateArr[selectIndex]['data'][key][item2[0]]">
+                    <input nz-input (input)="renderComponent()" [(ngModel)]="item[1]">
                   </div>
             </div>
         </section>
