@@ -30,6 +30,9 @@ $backgroundColor:#ececec;
             font-size: 17px;
             text-align: center;
             color: $wordsColor;
+            &>img{
+                width: 80%;
+            }
         }
     }
     &>div:first-of-type{

@@ -23,7 +23,8 @@ $dark:rgba(0,0,0,0.1);
 $wordsColor:rgba(0,0,0,0.5);
 $backgroundColor:#ececec;
 /*部件1样式*/
-.component-one{
+.menu-component{
+    display: block;
     width: 100%;
     overflow: auto;
     background-color: white;

@@ -3,7 +3,8 @@
     <ul>
       <li *ngFor="let item of template">
         <div class="template-item " (click)="addComponent(item.id)">
-          {{item.name}}
+          <img [src]="item.pic">
+          <p>{{item.name}}</p>
         </div>
       </li>
     </ul>
@@ -17,24 +18,34 @@
   <div nz-col [nzSpan]="9">
     <!--部件具体数据-->
     <div class="container-data">
-      {{templateArr.length}}
-      <ng-template *ngIf="templateArr.length>0">
-        <section class="data-block" *ngFor="let item of templateArr[selectIndex]['data']">
-          <div *ngFor="let item2 of item">
-            <input [value]="item2">
-          </div>
+      <ng-template [ngIf]="templateArr.length>0">
+        <section class="data-block" *ngFor="let item of selectData;let key=index">
+            <div *ngFor="let item2 of item;" nz-row>
+                  <p [nzSpan]=5 nz-col>
+                    {{item2[0]}}
+                  </p>
+                  <p [nzSpan]=1 nz-col>
+                    :
+                  </p>
+                  <div nz-col [nzSpan]=10>
+                    <input nz-input (input)="renderComponent()" [(ngModel)]="templateArr[selectIndex]['data'][key][item2[0]]">
+                  </div>
+            </div>
         </section>
       </ng-template>
 
       <!--上下移动部件位置-->
-      <button nz-button [nzType]="'primary'" (click)="positionUp()">
-        <i class="anticon anticon-down"></i>
-        <span>上移</span>
-      </button>
-      <button nz-button [nzType]="'primary'" (click)="positionDown()">
-        <i class="anticon anticon-up"></i>
-        <span>下移</span>
-      </button>
+      <div class="align-center">
+        <button nz-button [nzType]="'primary'" (click)="positionUp()">
+          <i class="anticon anticon-down"></i>
+          <span>上移</span>
+        </button>
+        <button nz-button [nzType]="'primary'" (click)="positionDown()">
+          <i class="anticon anticon-up"></i>
+          <span>下移</span>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>
