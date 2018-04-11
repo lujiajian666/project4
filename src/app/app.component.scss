@@ -13,6 +13,7 @@
 $dark:rgba(0,0,0,0.1);
 $wordsColor:rgba(0,0,0,0.5);
 $backgroundColor:#ececec;
+
 .container{
     margin: 20px;
     background: white;
@@ -62,8 +63,10 @@ $backgroundColor:#ececec;
 
 }
 .data-block{
-    border-bottom: 2px solid $dark;
     padding: 5px;
+    &>div{
+        margin-bottom:5px
+    }
 }
 .align-center{
     text-align: center
