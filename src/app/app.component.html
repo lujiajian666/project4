@@ -4,49 +4,71 @@
       <li *ngFor="let item of template">
         <div class="template-item " (click)="addComponent(item.id)">
           <img [src]="item.pic">
-          <p>{{item.name}}</p>
+          <p>{{item.name.value}}</p>
         </div>
       </li>
     </ul>
   </div>
   <div nz-col [nzSpan]="11">
-    <div class="container-phone">
-      <div class="container-phone-screen" id="container-phone-screen" (click)="handleData($event)">
+    <div class="container-phone" id="container-phone">
+      <div class="container-phone-screen" id="container-phone-screen" (click)="handleData($event)" data-index='-2'>
       </div>
     </div>
   </div>
   <div nz-col [nzSpan]="9">
     <!--部件具体数据-->
     <div class="container-data">
-      <ng-template [ngIf]="templateArr.length>0">
-        <section class="data-block">
-            <div *ngFor="let item of selectData;" nz-row >
-                  <p [nzSpan]=5 nz-col class="title">
-                    {{item[0]}}
-                  </p>
-                  <p [nzSpan]=1 nz-col>
-                    :
-                  </p>
-                  <div nz-col [nzSpan]=10>
-                    <input nz-input (keyup)="renderComponent()" 
-                    [(ngModel)]="templateArr[selectIndex]['data'][selectDataIndex][item[0]]">
-                  </div>
+      <ng-template [ngIf]="selectComponent!=myConstVar.CHOOSE_NOTHING">
+        <ng-template [ngIf]="selectComponent==myConstVar.CHOOSE_CONTENT">
+          <section class="data-block">
+            <div *ngFor="let item of selectData;" nz-row>
+              <p [nzSpan]=7 nz-col class="title" style="text-align:left">
+                {{item[0]}}
+              </p>
+              <p [nzSpan]=1 nz-col>
+                :
+              </p>
+              <div nz-col [nzSpan]=10>
+                <input nz-input (keyup)="renderComponent()" [(ngModel)]="templateArr[selectIndex]['data'][selectDataIndex][item[0]]">
+              </div>
             </div>
-        </section>
+          </section>
+        </ng-template>
+        <ng-template [ngIf]="selectComponent==myConstVar.CHOOSE_COMPONENT">
+          <section class="data-block">
+            <div *ngFor="let item of selectData;" nz-row>
+              <p [nzSpan]=7 nz-col class="title" style="text-align:left">
+                {{item[0]}}
+              </p>
+              <p [nzSpan]=1 nz-col>
+                :
+              </p>
+              <div nz-col [nzSpan]=10>
+                <input nz-input (keyup)="renderComponent()" [(ngModel)]="templateArr[selectIndex][item[0]]">
+              </div>
+            </div>
+          </section>
+        </ng-template>
+        <!--上下移动部件位置-->
+        <div class="align-center">
+          <button nz-button [nzType]="'primary'" (click)="positionUp()">
+            <i class="anticon anticon-up"></i>
+            <span>上移</span>
+          </button>
+          <button nz-button [nzType]="'primary'" (click)="delete()">
+            <i class="anticon anticon-delete"></i>
+            <span>删除</span>
+          </button>
+          <button nz-button [nzType]="'primary'" (click)="add()" *ngIf="selectComponent==myConstVar.CHOOSE_CONTENT">
+            <i class="anticon anticon-plus"></i>
+            <span>添加</span>
+          </button>
+          <button nz-button [nzType]="'primary'" (click)="positionDown()">
+            <i class="anticon anticon-down"></i>
+            <span>下移</span>
+          </button>
+        </div>
       </ng-template>
-
-      <!--上下移动部件位置-->
-      <div class="align-center">
-        <button nz-button [nzType]="'primary'" (click)="positionUp()">
-          <i class="anticon anticon-down"></i>
-          <span>上移</span>
-        </button>
-        <button nz-button [nzType]="'primary'" (click)="positionDown()">
-          <i class="anticon anticon-up"></i>
-          <span>下移</span>
-        </button>
-      </div>
-
     </div>
   </div>
 </div>

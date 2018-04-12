@@ -27,17 +27,29 @@ $backgroundColor:#ececec;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.selected{
+    border-color:  #49c;
+    box-sizing: border-box;
+}
+section{
+    padding: 10px !important;
+    box-sizing: border-box !important;
+}
 /*菜单部件样式*/
 .menu-component{
     display: block;
     width: 100%;
     overflow: auto;
+    font-size: 0px;
     background-color: white;
+    border:1px dashed transparent; 
     &>.item{
-        float: left;
+        display: inline-block;
         width: 20%;
         height: 90px;
         padding: 10px 0;
+        font-size: 14px;
+        border: 1px dashed transparent;
         &>.pic{
           display: block;
           margin: auto;
@@ -47,9 +59,16 @@ $backgroundColor:#ececec;
         &>.word{
             @extend .ellipsis;
             width: 100%;
+            padding-top: 5px;
             text-align: center;
             color: $wordsColor;
-            padding-top: 5px;
+        }
+        &.selected{
+           @extend .selected;
         }
     }
+    &.selected{
+        @extend .selected;
+    }
   }
+
