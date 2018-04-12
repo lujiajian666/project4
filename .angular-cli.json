@@ -22,7 +22,7 @@
         "styles.scss"
       ],
       "scripts": [
-        "../node_modules/Sortable.js"
+        "../Sortable.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -14,9 +14,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import {
-  sortablejs
-} from 'sortablejs'
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -183,10 +181,8 @@ export class AppComponent {
       dom.className = dom.className + " selected"
     }
     //拖拽
-    const el=document.getElementById("container-phone-screen");
-    const sortable=sortablejs;
-    sortable.create(el);
-    
+   const el=document.getElementById("container-phone-screen");
+   window["Sortable"].create(el);
   }
   //组件数组处理
   handleData(event) {
