@@ -14,8 +14,10 @@ const setSelectedClass=( className , node , area)=>{
          all.forEach(element => {
                  element.className=element.className.replace(re,"")
          }); 
-    //当前节点添加类名               
-    node.className = node.className+` ${className} `;
+    //当前节点添加类名   
+    if(node){
+      node.className = node.className+` ${className} `;
+    }            
 }
 //找出当前元素在兄弟节点中排第几
 const siblingsIndex = (elm) => {

@@ -8,11 +8,15 @@ export class MenuComponent implements baseComponent {
   public id = {
     value:1
   };
-  public maxChildrenNum=5;
+  public maxChildrenNum={
+    value:5
+  };
   public name = {
     value: "菜单"
   };
-  public pic: string = "../assets/menu.png";
+  public pic = {
+    value:"../assets/menu.png"
+  };
   public className= {
     value:"menu-component"
   };
@@ -55,7 +59,6 @@ export class MenuComponent implements baseComponent {
   };
   public render(index,selectDataIndex) {
     const data = this.data;
-    console.log(data);
     let html = `<section class='${this.className.value}' data-id='${index}' data-unique='${this.timestamp.value}' >`;
     data.forEach((value, index) => {
       let pic = value.pic || "../assets/nobody.png";

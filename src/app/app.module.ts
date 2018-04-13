@@ -4,7 +4,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { FormsModule,ReactiveFormsModule } from "@angular/forms";
 import { AppComponent } from './app.component';
 
-
+import { SortablejsModule } from 'angular-sortablejs';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,8 @@ import { AppComponent } from './app.component';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    NgZorroAntdModule.forRoot()
+    NgZorroAntdModule.forRoot(),
+    SortablejsModule.forRoot({ animation: 150 }),
   ],
   providers: [],
   bootstrap: [AppComponent]

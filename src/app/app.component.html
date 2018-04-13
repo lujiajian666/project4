@@ -3,7 +3,7 @@
     <ul>
       <li *ngFor="let item of template">
         <div class="template-item " (click)="addComponent(item.id)">
-          <img [src]="item.pic">
+          <img [src]="item.pic.value">
           <p>{{item.name.value}}</p>
         </div>
       </li>
@@ -11,7 +11,9 @@
   </div>
   <div nz-col [nzSpan]="11">
     <div class="container-phone" id="container-phone">
-      <div class="container-phone-screen" id="container-phone-screen" (click)="handleData($event)" data-index='-2'>
+      <div class="container-phone-screen" id="container-phone-screen" 
+      (click)="handleData($event)" data-index='myConstVar.DATA_INDEX_OF_CHOOSE_NOTHING'
+      [sortablejs]="templateArr" [sortablejsOptions]="sortableOptions">
       </div>
     </div>
   </div>
