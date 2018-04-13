@@ -59,7 +59,7 @@ export class MenuComponent implements baseComponent {
   };
   public render(index,selectDataIndex) {
     const data = this.data;
-    let html = `<section class='${this.className.value}' data-id='${index}' data-unique='${this.timestamp.value}' >`;
+    let html = `<section class='${this.className.value}'  data-unique='${this.timestamp.value}' >`;
     data.forEach((value, index) => {
       let pic = value.pic || "../assets/nobody.png";
       if(index == selectDataIndex){
@@ -70,7 +70,7 @@ export class MenuComponent implements baseComponent {
       html += ` 
                 <span class="pic" style='background-image:url(${pic})'></span>
                 <p class="word">
-                  <a href='${value.url}'>${value.title}</a>
+                  <a href='javascript:;'>${value.title}</a>
                 </p>
               </div>
               `
