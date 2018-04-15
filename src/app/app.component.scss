@@ -1,76 +1,127 @@
-@mixin position($top:auto,$right:auto,$bottom:auto,$left:auto){
-    position: absolute;
-    top:$top;
-    right: $right;
-    bottom: $bottom;
-    left: $left;
+@mixin position($top:auto, $right:auto, $bottom:auto, $left:auto) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
 }
-@mixin circle($length,$backgroundColor:inherit){
-    border-radius: 50%;
-    height: $length;
-    width: $length;
+
+@mixin circle($length, $backgroundColor:inherit) {
+  border-radius: 50%;
+  height: $length;
+  width: $length;
 }
-$dark:rgba(0,0,0,0.1);
-$wordsColor:rgba(0,0,0,0.5);
+
+$dark:rgba(0, 0, 0, 0.1);
+$wordsColor:rgba(0, 0, 0, 0.5);
 $backgroundColor:#ececec;
+.container {
+  margin: 20px;
+  background: white;
+  height: 100vh;
+  &>div {
+    position: relative;
+    height: 100%;
+    &::after {
+      content: "";
+      border-right: 1px solid $dark;
+      @include position(10px, 0, 10px)
+    }
+    & .template-item {
+      line-height: 30px;
+      font-size: 17px;
+      text-align: center;
+      color: $wordsColor;
+      &>img {
+        width: 80%;
+      }
+    }
+  }
+  &>div:first-of-type {
+    padding-top: 30px;
+  }
+  &>div:nth-of-type(2) {
+    padding-top: 30px;
+  }
+  & .container-phone {
+    margin: auto;
+    min-height: 400px;
+    height: 90%;
+    width: 325px;
+    border-radius: 20px/14px;
+    border: $wordsColor solid 1px;
+    overflow: auto;
+    &>.container-phone-screen {
+      background-color: $backgroundColor;
+      border: 1px solid $dark;
+      height: 95%;
+      margin-top: 5%;
+    }
+  }
+  & .container-data {
+    padding: 10px
+  }
+}
 
-.container{
-    margin: 20px;
+.data-block {
+  padding: 5px;
+  &>div {
+    margin-bottom: 5px
+  }
+}
+
+.align-center {
+  text-align: center
+}
+
+.ant-layout-sider {
+  flex: 0 0 300px !important;
+  background: white !important;
+}
+
+.title {
+  text-align: right;
+  line-height: 28px;
+}
+
+.logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, .2);
+  margin: 16px 28px 16px 0;
+  float: left;
+}
+
+.preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  background:rgba(0, 0, 0, 0.5);
+  & .container-phone {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    bottom: 20px;
+    right: 0;
+    margin: auto;
+    width: 325px;
+    background: transparent;
     background: white;
-    height: 100vh;
-    &>div{
-        position: relative;
-        height: 100%;
-        &::after{
-            content: "";
-            border-right: 1px solid $dark;
-            @include position(10px,0 ,10px)
-        }
-        & .template-item{
-            line-height: 30px;
-            font-size: 17px;
-            text-align: center;
-            color: $wordsColor;
-            &>img{
-                width: 80%;
-            }
-        }
-    }
-    &>div:first-of-type{
-        padding-top:30px;  
-    }
-    &>div:nth-of-type(2){
-        padding-top:30px;  
-    }
-    & .container-phone{
-        margin: auto;
-        min-height: 400px;
-        height: 90%;
-        width: 325px;
-        border-radius: 20px/14px;
-        border: $wordsColor solid 1px;
-        overflow: auto;
-        &>.container-phone-screen{
-            background-color: $backgroundColor;
-            border: 1px solid $dark;
-            height: 95%;
-            margin-top: 5%;
-        }
-    }
-    & .container-data{
-        padding: 10px
-    }
-
-}
-.data-block{
-    padding: 5px;
-    &>div{
-        margin-bottom:5px
-    }
-}
-.align-center{
-    text-align: center
+  }
 }
 
-
-
+.preview-button {
+  position: relative;
+  float: right;
+  line-height: 64px;
+  color: white;
+  cursor: pointer;
+  z-index: 11;
+  &:hover {
+    font-weight: bolder;
+  }
+}

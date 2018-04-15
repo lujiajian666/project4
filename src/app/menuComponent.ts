@@ -24,35 +24,15 @@ export class MenuComponent implements baseComponent {
     value:0
   }; //唯一标识符
   public data: any = [{
-      title: "喜马拉雅",
-      pic: "../assets/nobody.png",
-      url: "",
-    },
-    {
-      title: "精品课程",
-      pic: "",
-      url: "",
-    },
-    {
-      title: "签到有礼",
-      pic: "",
-      url: "",
-    },
-    {
-      title: "饮食专区",
-      pic: "",
-      url: "",
-    },
-    {
-      title: "会员登录",
-      pic: "",
-      url: "",
+      '组件名称': "喜马拉雅",
+      '图片地址': "../assets/nobody.png",
+      '链接': "",
     },
   ];
   public defaultData={
-    title: "新增内容",
-    pic: "../assets/nobody.png",
-    url: "#",
+    '组件名称': "新增内容",
+    '图片地址': "../assets/nobody.png",
+    '链接': "#",
   };
   public constructor(time) {
     this.timestamp = { value:time }
@@ -61,7 +41,7 @@ export class MenuComponent implements baseComponent {
     const data = this.data;
     let html = `<section class='${this.className.value}'  data-unique='${this.timestamp.value}' >`;
     data.forEach((value, index) => {
-      let pic = value.pic || "../assets/nobody.png";
+      let pic = value["图片地址"] || "../assets/nobody.png";
       if(index == selectDataIndex){
          html += `<div class="item selected" data-target>`
       } else{
@@ -70,7 +50,7 @@ export class MenuComponent implements baseComponent {
       html += ` 
                 <span class="pic" style='background-image:url(${pic})'></span>
                 <p class="word">
-                  <a href='javascript:;'>${value.title}</a>
+                  <a href='javascript:;'>${value["组件名称"]}</a>
                 </p>
               </div>
               `
@@ -78,6 +58,23 @@ export class MenuComponent implements baseComponent {
     html += `</section>`
     return html;
   };
+  public preview(index){
+    const data = this.data;
+    let html = `<section class='${this.className.value}'>`;
+    data.forEach((value) => {
+      let pic = value["图片地址"] || "../assets/nobody.png";
+      html += `<div class="item">`
+      html += ` 
+                <span class="pic" style='background-image:url(${pic})'></span>
+                <p class="word">
+                  <a href='${value["链接"]}'>${value["组件名称"]}</a>
+                </p>
+               </div>
+              `
+      })
+    html += `</section>`
+    return html;
+  }
   public bindFunc() {
     const node = document.querySelector(`[data-unique='${this.timestamp.value}']`);
     //data-unique层次的捕获阶段事件监听(class=menu-component)
@@ -110,6 +107,6 @@ export class MenuComponent implements baseComponent {
     let time = new Date().getTime();
     return new MenuComponent(time);
   }
-
+  
 }
 
