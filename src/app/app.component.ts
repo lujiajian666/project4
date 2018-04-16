@@ -18,7 +18,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-
+import { HttpService } from '../common/http.server'
 
 @Component({
   selector: 'app-root',
@@ -45,6 +45,11 @@ export class AppComponent {
   buttonDelete = true; //是否显示删除按钮
   buttonAdd = true; //是否显示添加按钮
   isAvailable = false;
+  fileList = [];
+  
+  constructor(private http:HttpService){
+    
+  }
   ngOnInit() {
     //给container-phone-screen绑定捕获阶段函数，给data-index设定没被点击，清空selected样式
     document.getElementById("container-phone").addEventListener("click", function () {
@@ -187,8 +192,9 @@ export class AppComponent {
       this.selectIndex = siblingsIndex(parent);
     }
     //把该组件的data转为数组，方便输出
-
+   
     this.selectDataIndex = event.currentTarget.getAttribute("data-index");
+    //console.log(this.selectDataIndex);
     if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_NOTHING) { //没选中东西
       this.selectPosition = constVar.CHOOSE_NOTHING;
     } else if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_COMPONENT) { //选中的是组件本身
@@ -204,6 +210,11 @@ export class AppComponent {
       console.log("选中第" + this.selectIndex + "个组件")
     } else {
       console.log("没选中")
+    }
+    //重新绑定样式
+    if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
+      const dom = document.getElementById("container-phone-screen").querySelectorAll("section").item(this.selectIndex);
+      dom.className = dom.className + " selected"
     }
     this.defineButton();
   }
@@ -347,5 +358,30 @@ export class AppComponent {
     } else {
       this.buttonAdd = this.buttonDelete = this.buttonNext = this.buttonPrev = false;
     }
+  }
+  //文件上传
+  beforeUpload(){
+    const pic=document.getElementById('pic');
+    console.log(pic);
+    pic.click();
+  }
+  upload(event){
+    const file=event.currentTarget.files[0];
+    console.log(file);
+    const formData = new FormData();
+          formData.append('imgFiles',file);
+    this.http.post("http://k.21cn.com/api/publish/uploadUserPic.do",formData)
+        .then(res=>{
+            console.log(res)
+            if(this.selectPosition == constVar.CHOOSE_COMPONENT){
+              this.templateArr[this.selectIndex]['图片']=res.list[0]["url"];
+            }else{
+              this.templateArr[this.selectIndex]['data'][this.selectDataIndex]['图片']=res.list[0]["url"];
+            }
+            this.renderComponent();
+        })
+        .catch(res =>{
+            console.log(res)
+        })
   }
 }
