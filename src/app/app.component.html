@@ -55,19 +55,47 @@
               </ng-template>
               <!--上下移动部件位置-->
               <div>
-                <button nz-button [nzType]="'primary'" (click)="positionUp()" *ngIf="buttonPrev">
+                <button nz-button [nzType]="'primary'" (click)="positionUp()"
+                [ngStyle]=" 
+                {
+                  'color': buttonPrev?'#fff':'rgba(0, 0, 0, 0.25)',
+                  'background-color':buttonPrev?'#108ee9':'#f7f7f7',
+                  'border-color':buttonPrev?'#108ee9':'#d9d9d9',
+                  'pointer-events':buttonPrev?'auto':'none'
+                }">
                   <i class="anticon anticon-up"></i>
                   <span>向前</span>
                 </button>
-                <button nz-button [nzType]="'primary'" (click)="delete()" *ngIf="buttonDelete">
+                <button nz-button [nzType]="'primary'" (click)="delete()"
+                [ngStyle]=" 
+                {
+                  'color': buttonDelete?'#fff':'rgba(0, 0, 0, 0.25)',
+                  'background-color':buttonDelete?'#108ee9':'#f7f7f7',
+                  'border-color':buttonDelete?'#108ee9':'#d9d9d9',
+                  'pointer-events':buttonDelete?'auto':'none'
+                }">
                   <i class="anticon anticon-delete"></i>
                   <span>删除</span>
                 </button>
-                <button nz-button [nzType]="'primary'" (click)="add()" *ngIf="selectPosition==myConstVar.CHOOSE_CONTENT && buttonAdd">
+                <button nz-button [nzType]="'primary'" (click)="add()" 
+                [ngStyle]=" 
+                {
+                  'color': buttonAdd?'#fff':'rgba(0, 0, 0, 0.25)',
+                  'background-color':buttonAdd?'#108ee9':'#f7f7f7',
+                  'border-color':buttonAdd?'#108ee9':'#d9d9d9',
+                  'pointer-events':buttonAdd?'auto':'none'
+                }">
                   <i class="anticon anticon-plus"></i>
                   <span>添加</span>
                 </button>
-                <button nz-button [nzType]="'primary'" (click)="positionDown()" *ngIf="buttonNext">
+                <button nz-button [nzType]="'primary'" (click)="positionDown()" 
+                [ngStyle]=" 
+                {
+                  'color': buttonNext?'#fff':'rgba(0, 0, 0, 0.25)',
+                  'background-color':buttonNext?'#108ee9':'#f7f7f7',
+                  'border-color':buttonNext?'#108ee9':'#d9d9d9',
+                  'pointer-events':buttonNext?'auto':'none'
+                }">
                   <i class="anticon anticon-down"></i>
                   <span>向后</span>
                 </button>

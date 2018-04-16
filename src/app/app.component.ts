@@ -55,6 +55,7 @@ export class AppComponent {
     this.sortableOptions = {
       onUpdate: (event: any) => {
         this.selectIndex = event.newIndex;
+        this.defineButton();
       }
     };
 
@@ -74,6 +75,7 @@ export class AppComponent {
         this.templateArr = this.templateArr; //触发set重新渲染
       }
     });
+    document.getElementById("container-phone-screen").scrollTo(0,document.body.scrollHeight)
     this.defineButton();
   }
   //上移
@@ -141,7 +143,9 @@ export class AppComponent {
         this.selectIndex--;
       } else {
         this.selectIndex = 0;
-        this.selectPosition = constVar.CHOOSE_NOTHING;
+        if(this.templateArr.length == 0){
+          this.selectPosition = constVar.CHOOSE_NOTHING;
+        }
       }
       this.templateArr = this.templateArr //触发
     } else if (this.selectPosition == constVar.CHOOSE_CONTENT) {
@@ -150,6 +154,10 @@ export class AppComponent {
       this.templateArr[this.selectIndex]["data"].splice(this.selectDataIndex, 1);
       if (this.selectDataIndex == 0 && this.templateArr[this.selectIndex]["data"].length) {
         this.selectDataIndex = 0;
+      } else if(this.selectDataIndex == 0 && !this.templateArr[this.selectIndex]["data"].length){
+        this.selectDataIndex = 0;
+        this.selectPosition = constVar.CHOOSE_COMPONENT;
+        this.selectData = [];
       } else {
         this.selectDataIndex--;
       }
@@ -168,7 +176,6 @@ export class AppComponent {
       this.renderComponent();
     }
     //重新确定button显示
-    console.log(this.templateArr[this.selectIndex]["data"]);
     this.defineButton()
   }
   //组件数组处理
@@ -182,7 +189,6 @@ export class AppComponent {
     //把该组件的data转为数组，方便输出
 
     this.selectDataIndex = event.currentTarget.getAttribute("data-index");
-    console.log("uu:" + this.selectDataIndex)
     if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_NOTHING) { //没选中东西
       this.selectPosition = constVar.CHOOSE_NOTHING;
     } else if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_COMPONENT) { //选中的是组件本身
@@ -283,7 +289,6 @@ export class AppComponent {
   }
   //判断按钮是否显示
   defineButton() {
-    //console.log(this.selectPosition)
     if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
       const value = this.selectIndex;
       const lenght = this.templateArr.length;
@@ -304,6 +309,12 @@ export class AppComponent {
         this.buttonNext = true;
       } else {
         this.buttonNext = false;
+      }
+       //添加按钮
+       if (this.templateArr[this.selectIndex]["data"].length < this.templateArr[this.selectIndex]["maxChildrenNum"].value) {
+        this.buttonAdd = true;
+      } else {
+        this.buttonAdd = false;
       }
     } else if (this.selectPosition == constVar.CHOOSE_CONTENT) {
       const lenght = this.templateArr[this.selectIndex]["data"].length;

@@ -26,7 +26,7 @@ export class MenuComponent implements baseComponent {
   public data: any = [{
       '组件名称': "喜马拉雅",
       '图片地址': "../assets/nobody.png",
-      '链接': "",
+      '链接': "#",
     },
   ];
   public defaultData={
@@ -99,6 +99,7 @@ export class MenuComponent implements baseComponent {
       }
 
     })
+
   };
   public setData(value) {
     this.data = value;

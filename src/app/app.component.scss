@@ -50,12 +50,14 @@ $backgroundColor:#ececec;
     width: 325px;
     border-radius: 20px/14px;
     border: $wordsColor solid 1px;
-    overflow: auto;
+    overflow: hidden;
     &>.container-phone-screen {
-      background-color: $backgroundColor;
-      border: 1px solid $dark;
+      width: 341px;
       height: 95%;
       margin-top: 5%;
+      border: 1px solid $dark;
+      background-color: $backgroundColor;
+      overflow: auto;
     }
   }
   & .container-data {
@@ -109,8 +111,12 @@ $backgroundColor:#ececec;
     right: 0;
     margin: auto;
     width: 325px;
-    background: transparent;
+    max-height: 700px;
     background: white;
+  }
+  & .container-phone-screen{
+    width: 341px;
+    overflow:auto;
   }
 }
 
@@ -124,4 +130,10 @@ $backgroundColor:#ececec;
   &:hover {
     font-weight: bolder;
   }
+}
+.disable{
+  color: rgba(0, 0, 0, 0.25);
+  background-color: #f7f7f7;
+  border-color: #d9d9d9;
+  pointer-events: none;
 }
