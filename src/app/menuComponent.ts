@@ -109,7 +109,7 @@ export class MenuComponent implements baseComponent {
         //触发一下点击事件，更新选中的位置,这里不延迟的话会出现搞不清楚的状况，节点会选择错误
         setTimeout(function(){
           event.item.click();
-        },300)
+        },100)
       },animation: 200
     });
   };

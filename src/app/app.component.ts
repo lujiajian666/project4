@@ -18,7 +18,9 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { HttpService } from '../common/http.server'
+import {
+  HttpService
+} from '../common/http.server'
 
 @Component({
   selector: 'app-root',
@@ -46,9 +48,9 @@ export class AppComponent {
   buttonAdd = true; //是否显示添加按钮
   isAvailable = false;
   fileList = [];
-  
-  constructor(private http:HttpService){
-    
+
+  constructor(private http: HttpService) {
+
   }
   ngOnInit() {
     //给container-phone-screen绑定捕获阶段函数，给data-index设定没被点击，清空selected样式
@@ -80,7 +82,6 @@ export class AppComponent {
         this.templateArr = this.templateArr; //触发set重新渲染
       }
     });
-    document.getElementById("container-phone-screen").scrollTo(0,document.body.scrollHeight)
     this.defineButton();
   }
   //上移
@@ -148,7 +149,7 @@ export class AppComponent {
         this.selectIndex--;
       } else {
         this.selectIndex = 0;
-        if(this.templateArr.length == 0){
+        if (this.templateArr.length == 0) {
           this.selectPosition = constVar.CHOOSE_NOTHING;
         }
       }
@@ -159,7 +160,7 @@ export class AppComponent {
       this.templateArr[this.selectIndex]["data"].splice(this.selectDataIndex, 1);
       if (this.selectDataIndex == 0 && this.templateArr[this.selectIndex]["data"].length) {
         this.selectDataIndex = 0;
-      } else if(this.selectDataIndex == 0 && !this.templateArr[this.selectIndex]["data"].length){
+      } else if (this.selectDataIndex == 0 && !this.templateArr[this.selectIndex]["data"].length) {
         this.selectDataIndex = 0;
         this.selectPosition = constVar.CHOOSE_COMPONENT;
         this.selectData = [];
@@ -192,7 +193,7 @@ export class AppComponent {
       this.selectIndex = siblingsIndex(parent);
     }
     //把该组件的data转为数组，方便输出
-   
+
     this.selectDataIndex = event.currentTarget.getAttribute("data-index");
     //console.log(this.selectDataIndex);
     if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_NOTHING) { //没选中东西
@@ -220,7 +221,7 @@ export class AppComponent {
   }
   //重新渲染某个组件的函数
   renderComponent() {
-    console.log("重新渲染单个组件")
+    const timeStart = new Date().getTime();
     const index = this.selectIndex;
     let newHtml;
     if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
@@ -246,24 +247,26 @@ export class AppComponent {
       const dom = document.getElementById("container-phone-screen").querySelectorAll("section").item(this.selectIndex);
       dom.className = dom.className + " selected"
     }
+    const timeEnd = new Date().getTime();
+    console.log("重新渲染单个组件,共耗时："+(timeEnd-timeStart)+"毫秒")
   }
   //预览
   preview($event) {
     if (this.isAvailable == false) {
       this.isAvailable = true;
-      $event.currentTarget.innerText="关闭";
-      document.getElementById("preview").style.display="block";
+      $event.currentTarget.innerText = "关闭";
+      document.getElementById("preview").style.display = "block";
       this.previewHtml = "";
       this.templateArr.forEach((item, index) => {
         this.previewHtml += item.preview(index);
       })
-      document.getElementById("previewHtml").innerHTML=this.previewHtml;
+      document.getElementById("previewHtml").innerHTML = this.previewHtml;
     } else {
-      document.getElementById("preview").style.display="none";
-      document.getElementById("previewHtml").innerHTML=this.previewHtml;
+      document.getElementById("preview").style.display = "none";
+      document.getElementById("previewHtml").innerHTML = this.previewHtml;
       this.previewHtml = "";
       this.isAvailable = false;
-      $event.currentTarget.innerText="预览";
+      $event.currentTarget.innerText = "预览";
     }
 
   }
@@ -273,7 +276,8 @@ export class AppComponent {
     return this._templateArr;
   }
   set templateArr(change) {
-    console.log("重新渲染所有组件")
+    const timeStart=new Date().getTime();
+    const screen = document.getElementById("container-phone-screen");
     this._templateArr = change;
     this.renderHtml = "";
     //渲染模板
@@ -284,19 +288,29 @@ export class AppComponent {
         this.renderHtml += item.render(index);
       }
     })
-    document.getElementById("container-phone-screen").innerHTML = this.renderHtml;
+    screen.innerHTML = this.renderHtml;
     //绑定函数
     this._templateArr.forEach((item, index) => {
       item.bindFunc();
     })
     //selected样式绑定
     if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
-      const dom = document.getElementById("container-phone-screen")
-        .querySelectorAll("section").item(this.selectIndex);
+      const dom = screen.querySelectorAll("section").item(this.selectIndex);
       if (dom) {
         dom.className = dom.className + " selected"
       }
     }
+    //screen宽度确定 出现滚动条时预留16px隐藏
+    const screenScrollHeight = screen.scrollHeight;
+    screen.scrollTo(0, screenScrollHeight);
+    const screenScrollTop = screen.scrollTop;
+    if (screenScrollTop > 0) {
+      screen.style.width = "341px";
+    } else {
+      screen.style.width = "325px";
+    }
+    const timeEnd=new Date().getTime();
+    console.log("重新渲染所有组件，共耗时："+(timeEnd-timeStart)+"毫秒")
   }
   //判断按钮是否显示
   defineButton() {
@@ -321,8 +335,8 @@ export class AppComponent {
       } else {
         this.buttonNext = false;
       }
-       //添加按钮
-       if (this.templateArr[this.selectIndex]["data"].length < this.templateArr[this.selectIndex]["maxChildrenNum"].value) {
+      //添加按钮
+      if (this.templateArr[this.selectIndex]["data"].length < this.templateArr[this.selectIndex]["maxChildrenNum"].value) {
         this.buttonAdd = true;
       } else {
         this.buttonAdd = false;
@@ -360,28 +374,28 @@ export class AppComponent {
     }
   }
   //文件上传
-  beforeUpload(){
-    const pic=document.getElementById('pic');
+  beforeUpload() {
+    const pic = document.getElementById('pic');
     console.log(pic);
     pic.click();
   }
-  upload(event){
-    const file=event.currentTarget.files[0];
+  upload(event) {
+    const file = event.currentTarget.files[0];
     console.log(file);
     const formData = new FormData();
-          formData.append('imgFiles',file);
-    this.http.post("http://k.21cn.com/api/publish/uploadUserPic.do",formData)
-        .then(res=>{
-            console.log(res)
-            if(this.selectPosition == constVar.CHOOSE_COMPONENT){
-              this.templateArr[this.selectIndex]['图片']=res.list[0]["url"];
-            }else{
-              this.templateArr[this.selectIndex]['data'][this.selectDataIndex]['图片']=res.list[0]["url"];
-            }
-            this.renderComponent();
-        })
-        .catch(res =>{
-            console.log(res)
-        })
+    formData.append('imgFiles', file);
+    this.http.post("http://k.21cn.com/api/publish/uploadUserPic.do", formData)
+      .then(res => {
+        console.log(res)
+        if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
+          this.templateArr[this.selectIndex]['图片'] = res.list[0]["url"];
+        } else {
+          this.templateArr[this.selectIndex]['data'][this.selectDataIndex]['图片'] = res.list[0]["url"];
+        }
+        this.renderComponent();
+      })
+      .catch(res => {
+        console.log(res)
+      })
   }
 }
