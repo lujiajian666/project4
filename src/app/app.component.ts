@@ -41,7 +41,14 @@ export class AppComponent {
   selectPosition = constVar.CHOOSE_NOTHING;
 
   myConstVar = constVar //给模板用的常量
-  sortableOptions; //sortablejs参数
+  sortableOptions ={
+    scroll: false,
+    disabled: false,
+    onUpdate: (event: any) => {
+      this.selectIndex = event.newIndex;
+      this.defineButton();
+    }
+  }; //sortablejs参数
   buttonPrev = true; //是否显示上移按钮
   buttonNext = true; //是否显示下移按钮
   buttonDelete = true; //是否显示删除按钮
@@ -54,21 +61,35 @@ export class AppComponent {
   }
   ngOnInit() {
     //给container-phone-screen绑定捕获阶段函数，给data-index设定没被点击，清空selected样式
+    const screen = document.getElementById("container-phone-screen");
     document.getElementById("container-phone").addEventListener("click", function () {
-      document.getElementById("container-phone-screen").setAttribute("data-index", constVar.DATA_INDEX_OF_CHOOSE_NOTHING.toString())
-      setSelectedClass("selected", null, document.getElementById("container-phone-screen"));
+      screen.setAttribute("data-index", constVar.DATA_INDEX_OF_CHOOSE_NOTHING.toString())
+      setSelectedClass("selected", null, screen);
     }, true)
-    //拖动参数
-    this.sortableOptions = {
-      onUpdate: (event: any) => {
-        this.selectIndex = event.newIndex;
-        this.defineButton();
+    //改变sortablejs参数
+    screen.addEventListener("mousedown", (event) => {
+      const target = findSpecialParent("data-target", event.target);
+      if (target == null) {
+        this.sortableOptions = {
+          scroll: false,
+          disabled: false,
+          onUpdate: (event: any) => {
+            this.selectIndex = event.newIndex;
+            this.defineButton();
+          }
+        };
+      } else {
+        this.sortableOptions = {
+          scroll: false,
+          disabled: true,
+          onUpdate: (event: any) => {
+            this.selectIndex = event.newIndex;
+            this.defineButton();
+          }
+        };
       }
-    };
-
+    });
   }
-
-
   //增加组件
   addComponent(id) {
     this.template.forEach((item, index) => {
@@ -195,7 +216,6 @@ export class AppComponent {
     //把该组件的data转为数组，方便输出
 
     this.selectDataIndex = event.currentTarget.getAttribute("data-index");
-    //console.log(this.selectDataIndex);
     if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_NOTHING) { //没选中东西
       this.selectPosition = constVar.CHOOSE_NOTHING;
     } else if (this.selectDataIndex == constVar.DATA_INDEX_OF_CHOOSE_COMPONENT) { //选中的是组件本身
@@ -248,7 +268,7 @@ export class AppComponent {
       dom.className = dom.className + " selected"
     }
     const timeEnd = new Date().getTime();
-    console.log("重新渲染单个组件,共耗时："+(timeEnd-timeStart)+"毫秒")
+    console.log("重新渲染单个组件,共耗时：" + (timeEnd - timeStart) + "毫秒")
   }
   //预览
   preview($event) {
@@ -276,7 +296,7 @@ export class AppComponent {
     return this._templateArr;
   }
   set templateArr(change) {
-    const timeStart=new Date().getTime();
+    const timeStart = new Date().getTime();
     const screen = document.getElementById("container-phone-screen");
     this._templateArr = change;
     this.renderHtml = "";
@@ -300,17 +320,10 @@ export class AppComponent {
         dom.className = dom.className + " selected"
       }
     }
-    //screen宽度确定 出现滚动条时预留16px隐藏
     const screenScrollHeight = screen.scrollHeight;
     screen.scrollTo(0, screenScrollHeight);
-    const screenScrollTop = screen.scrollTop;
-    if (screenScrollTop > 0) {
-      screen.style.width = "341px";
-    } else {
-      screen.style.width = "325px";
-    }
-    const timeEnd=new Date().getTime();
-    console.log("重新渲染所有组件，共耗时："+(timeEnd-timeStart)+"毫秒")
+    const timeEnd = new Date().getTime();
+    console.log("重新渲染所有组件，共耗时：" + (timeEnd - timeStart) + "毫秒")
   }
   //判断按钮是否显示
   defineButton() {
