@@ -79,13 +79,19 @@ const objToArr = (obj) => {
 }
 interface baseComponent {
   render(index,selectDataIndex);
+  preview(index);
   bindFunc();
   setData(value);
+  getInstance(time);
   id;
+  pic;
   name;
   data;
+  timestamp;
   defaultData;
-  className
+  className;
+  button;
+  maxChildrenNum
 }
 const constVar={
   //id=container-phone-screen处的data-index，如果是-2，是没选中组件(对应状态0)，-1选中组件（对应状态1）,其他选中组件内容（对应状态2）

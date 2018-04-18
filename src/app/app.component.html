@@ -10,9 +10,9 @@
     <nz-sider>
       <div class="container">
         <h2 class="h2">组件模板</h2>
-        <ul style="text-align: center;position: relative;top:30px">
+        <ul style="text-align: center;position: relative;top:30px" >
           <li *ngFor="let item of template">
-            <div class="template-item " (click)="addComponent(item.id)">
+            <div class="template-item " (click)="addComponent(item.id)" draggable="true" (dragstart)="drag($event,item.id)">
               <img [src]="item.pic.value">
               <p>{{item.name.value}}</p>
             </div>
@@ -22,11 +22,11 @@
     </nz-sider>
     <nz-content>
       <div nz-row class="container" style="min-width: 750px;">
-        <div nz-col [nzSpan]="12">
+        <div nz-col [nzSpan]="12" style="border-right: 1px solid rgba(0, 0, 0, 0.1);border-left: 1px solid rgba(0, 0, 0, 0.1);">
           <h2 class="h2" style="margin-bottom:30px">页面配置</h2>
-          <div class="container-phone flex" id="container-phone">
+          <div class="container-phone" id="container-phone">
             <div class="container-phone-screen" id="container-phone-screen" (click)="handleData($event)" data-index='myConstVar.DATA_INDEX_OF_CHOOSE_NOTHING'
-              [sortablejs]="templateArr" [sortablejsOptions]="sortableOptions">
+              [sortablejs]="templateArr" [sortablejsOptions]="templateArrSortableOptions" (drop)="drop($event)" (dragover)="dragover($event)">
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
                           <div nz-col [nzSpan]="14">
                             <input nz-input (keyup)="renderComponent()" [(ngModel)]="templateArr[selectIndex]['data'][selectDataIndex][item[0]]">
                           </div>
-                          <div nz-col [nzSpan]="7" [nzOffset]="2">
+                          <div nz-col [nzSpan]="10" style="text-align:right">
                             <button nzType="primary" nz-button (click)="beforeUpload()">
                               <span>图片上传</span>
                             </button>
@@ -75,7 +75,7 @@
                           <div nz-col [nzSpan]="14">
                             <input nz-input (keyup)="renderComponent()" [(ngModel)]="templateArr[selectIndex][item[0]]">
                           </div>
-                          <div nz-col [nzSpan]="7" [nzOffset]="2">
+                          <div nz-col [nzSpan]="10" style="text-align:right">
                             <button nz-button nzType="primary" (click)="document.getElementById('pic').click()">
                               <span>图片上传</span>
                             </button>
@@ -97,17 +97,17 @@
                   'pointer-events':buttonPrev?'auto':'none'
                 }">
                   <span>
-                    {{selectPosition == myConstVar.CHOOSE_COMPONENT?"上移":templateArr[selectIndex]['data'][selectDataIndex]['button']['prev']}}
+                    {{selectPosition == myConstVar.CHOOSE_COMPONENT?"上移":templateArr[selectIndex]['button']['prev']}}
                   </span>
                 </button>
-                <button nz-button [nzType]="'primary'" (click)="delete()" [ngStyle]=" 
+                <button nz-button [nzType]="'primary'" (click)="positionDown()" [ngStyle]=" 
                 {
-                  'color': buttonDelete?'#fff':'rgba(0, 0, 0, 0.25)',
-                  'background-color':buttonDelete?'#108ee9':'#f7f7f7',
-                  'border-color':buttonDelete?'#108ee9':'#d9d9d9',
-                  'pointer-events':buttonDelete?'auto':'none'
+                  'color': buttonNext?'#fff':'rgba(0, 0, 0, 0.25)',
+                  'background-color':buttonNext?'#108ee9':'#f7f7f7',
+                  'border-color':buttonNext?'#108ee9':'#d9d9d9',
+                  'pointer-events':buttonNext?'auto':'none'
                 }">
-                  <span>删除</span>
+                  <span>{{selectPosition == myConstVar.CHOOSE_COMPONENT?"下移":templateArr[selectIndex]['button']['next']}}</span>
                 </button>
                 <button nz-button [nzType]="'primary'" (click)="add()" [ngStyle]=" 
                 {
@@ -118,14 +118,11 @@
                 }">
                   <span>添加</span>
                 </button>
-                <button nz-button [nzType]="'primary'" (click)="positionDown()" [ngStyle]=" 
+                <button nz-button [nzType]="'danger'" (click)="delete()" [ngStyle]=" 
                 {
-                  'color': buttonNext?'#fff':'rgba(0, 0, 0, 0.25)',
-                  'background-color':buttonNext?'#108ee9':'#f7f7f7',
-                  'border-color':buttonNext?'#108ee9':'#d9d9d9',
-                  'pointer-events':buttonNext?'auto':'none'
+                  'pointer-events':buttonDelete?'auto':'none'
                 }">
-                  <span>向后</span>
+                  <span>删除</span>
                 </button>
               </div>
             </ng-template>

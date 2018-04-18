@@ -4,47 +4,77 @@ import {
   siblingsIndex,
   setSelectedClass
 } from './base';
-export class MenuComponent implements baseComponent {
+export class ListComponent implements baseComponent {
   public id = {
-    value: 1
-  };
-  public button = {
-    prev:"上移动",
-    next:"下移"
-  }
-  public maxChildrenNum = {
-    value: 5
+    value: 2
   };
   public name = {
-    value: "菜单"
+    value: "列表"
   };
   public pic = {
     value: "../assets/menu.png"
   };
-  public className = {
-    value: "menu-component"
-  };
+  public data = [{
+      '标题': '我们需要什么样的文学观?',
+      '小标题': "21天系统化教你上手带团队",
+      '图标': "http://placehold.it/60x70",
+      '原价': 20,
+      '现价': 20,
+      '链接': ""
+    },
+    /*{
+      '标题': '日剧里的吃',
+      '小标题': "解答购房困惑，助你财富逆袭",
+      '图标': "http://placehold.it/30x30",
+      '原价': 20,
+      '现价': 20
+    },
+    {
+      '标题': '你是因为听了周杰伦的哪首歌',
+      '小标题': "科学瘦八斤，高效不反弹",
+      '图标': "http://placehold.it/30x30",
+      '原价': 20,
+      '现价': 20
+    }*/
+  ]
   public timestamp = {
     value: 0
   }; //唯一标识符
-  public data: any = [{
-    '名称': "菜单名称",
-    '图标': "../assets/nobody.png",
-    '链接': "",
-  }, ];
   public defaultData = {
-    '名称': "菜单名称",
-    '图标': "../assets/nobody.png",
-    '链接': "",
+    '标题': '请填写标题',
+    '小标题': "请填写小标题",
+    '图标': "http://placehold.it/60x70",
+    '原价': 20,
+    '现价': 20,
+    '链接': ""
+  }
+  public className = {
+    value: "list-component"
+  };
+  public button = {
+    prev: "上移",
+    next: "下移"
+  }
+  public maxChildrenNum = {
+    value: 3
   };
   public constructor(time) {
     this.timestamp = {
       value: time
     }
   };
-  public render(index, selectDataIndex) {
+  public getInstance() {
+    let time = new Date().getTime();
+    return new ListComponent(time);
+  }
+  public render(isselect, selectDataIndex) {
     const data = this.data;
-    let html = `<section class='${this.className.value} '  data-unique='${this.timestamp.value}'><ul>`;
+    let html = "";
+    if (isselect) {
+      html = `<section class='${this.className.value} selected'  data-unique='${this.timestamp.value}'><ul>`;
+    } else {
+      html = `<section class='${this.className.value}'  data-unique='${this.timestamp.value}'><ul>`;
+    }
     data.forEach((value, index) => {
       let pic = value["图标"] || "../assets/nobody.png";
       if (index == selectDataIndex) {
@@ -53,31 +83,45 @@ export class MenuComponent implements baseComponent {
         html += `<li class="item" data-target>`
       }
       html += ` 
-                <span class="pic" style='background-image:url(${pic})'></span>
-                <p class="word">
-                  <a href='javascript:;'>${value["名称"]}</a>
-                </p>
-              </li>
-              `
+        <div class='left'>
+          <span class="pic" style='background-image:url(${pic})'></span>
+        </div>
+        <div class='right'>
+          <p class="title">${value['标题']}</p>
+          <p class="sub-title">${value['小标题']}</p>
+          <p class="price">
+            <span class="original-price">${value['原价']}元</span>
+            <span class="discount-price">${value['现价']}元</span>
+          </p>
+        </div>
+       </li>`
     })
     html += `</ul></section>`
     return html;
-  };
-  public preview(index) {
+  }
+  public preview() {
     const data = this.data;
-    let html = `<section class='${this.className.value}'>`;
-    data.forEach((value) => {
+    let html = `<section class='${this.className.value}'><ul>`;
+    data.forEach((value, index) => {
       let pic = value["图标"] || "../assets/nobody.png";
-      html += `<div class="item">`
       html += ` 
-                <span class="pic" style='background-image:url(${pic})'></span>
-                <p class="word">
-                  <a href='${value["链接"]}'>${value["名称"]}</a>
-                </p>
-               </div>
-              `
+       <li class="item">
+        <div class='left'>
+         <a href='${value['链接']}'>
+          <span class="pic" style='background-image:url(${pic})'></span>
+         </a>
+        </div>
+        <div class='right'>
+          <p class="title">${value['标题']}</p>
+          <p class="sub-title">${value['小标题']}</p>
+          <p class="price">
+            <span class="original-price">${value['原价']}元</span>
+            <span class="discount-price">${value['现价']}元</span>
+          </p>
+        </div>
+       </li>`
     })
-    html += `</section>`
+    html += `</ul></section>`
     return html;
   }
   public bindFunc() {
@@ -120,13 +164,6 @@ export class MenuComponent implements baseComponent {
       animation: 200
     });
 
-  };
-  public setData(value) {
-    this.data = value;
-  };
-  public getInstance() {
-    let time = new Date().getTime();
-    return new MenuComponent(time);
   }
-
+  public setData() {}
 }

@@ -1,10 +1,11 @@
+import { ListComponent } from './list-component';
 import {
   Component,
   OnInit
 } from '@angular/core';
 import {
-  MenuComponent
-} from './menuComponent'
+  MenuComponent,
+} from './menu-component'
 import {
   findSpecialParent,
   objToArr,
@@ -27,11 +28,19 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+/**
+ * data-index  记录当前选中的是第几个组件内容 -2 没选中任何东西 -1 选中了组件 0以上（数值参考base.ts
+ *             里的constVar）选中了第几个组件内容
+ * data-ul     鼠标右键菜单显示的ul专有，配合findSpecialParent用来确定选区
+ * data-target 组件内的内容专有，配合findSpecialParent用来确定选区
+ * data-unique 组件专有，其值由组件内部的timestamp确定，用来唯一标识组件
+ */
 export class AppComponent {
   _templateArr = [];
 
   template = [
-    new MenuComponent(new Date().getTime())
+    new MenuComponent(new Date().getTime()),
+    new ListComponent(new Date().getTime()),
   ];
   renderHtml = '';
   previewHtml = '';
@@ -39,9 +48,9 @@ export class AppComponent {
   selectIndex: number = -1;
   selectDataIndex: number //当前选中的组件里的data数组的第几条数据,根据这个获取selectData
   selectPosition = constVar.CHOOSE_NOTHING;
-
+  dragTemplateId;
   myConstVar = constVar //给模板用的常量
-  sortableOptions ={
+  templateArrSortableOptions = {
     scroll: false,
     disabled: false,
     onUpdate: (event: any) => {
@@ -63,14 +72,86 @@ export class AppComponent {
     //给container-phone-screen绑定捕获阶段函数，给data-index设定没被点击，清空selected样式
     const screen = document.getElementById("container-phone-screen");
     document.getElementById("container-phone").addEventListener("click", function () {
+      //console.log(0)
       screen.setAttribute("data-index", constVar.DATA_INDEX_OF_CHOOSE_NOTHING.toString())
       setSelectedClass("selected", null, screen);
     }, true)
+
+    /**绑定右键事件**/
+    const myMenu = document.createElement("ul");
+    //给ul委托左右移动，添加删除事件
+    myMenu.addEventListener("click", event => {
+      let action = event.target["getAttribute"]("id");
+      if (action == "prev") {
+        this.positionUp();
+      } else if (action == "next") {
+        this.positionDown();
+      } else if (action == "delete") {
+        this.delete();
+      } else if (action == "add") {
+        this.add();
+      } else {
+        return;
+      }
+      myMenu.style.display = "none";
+    })
+    myMenu.className = "myMenu";
+    myMenu.setAttribute("data-ul", "myMenu");
+    document.body.appendChild(myMenu);
+    document.addEventListener("contextmenu", event => {
+      event.preventDefault();
+      event.target['click']();
+      //根据选中位置生成右键菜单内容
+      let menuContent = "";
+      if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
+        if (this.buttonPrev) {
+          menuContent += `<li id='prev'>上移</li>`;
+        }
+        if (this.buttonNext) {
+          menuContent += `<li id='next'>下移</li>`;
+        }
+        if (this.buttonAdd) {
+          menuContent += `<li id='add'>添加</li>`;
+        }
+        if (this.buttonDelete) {
+          menuContent += `<li id='delete'>删除</li>`;
+        }
+      } else if (this.selectPosition == constVar.CHOOSE_CONTENT) {
+        if (this.buttonPrev) {
+          menuContent += `<li id='prev'>${this.templateArr[this.selectIndex]["button"]["prev"]}</li>`;
+        }
+        if (this.buttonNext) {
+          menuContent += `<li id='next'>${this.templateArr[this.selectIndex]["button"]["next"]}</li>`;
+        }
+        if (this.buttonAdd) {
+          menuContent += `<li id='add'>添加</li>`;
+        }
+        if (this.buttonDelete) {
+          menuContent += `<li id='delete'>删除</li>`;
+        }
+      } else {
+        return;
+      }
+      myMenu.innerHTML = menuContent;
+      myMenu.style.display = "block";
+      //获取鼠标视口位置
+      myMenu.style.top = document.documentElement.scrollTop + event.clientY + "px";
+      myMenu.style.left = event.clientX + "px";
+    });
+    //点击取消显示
+    document.addEventListener("mousedown", event => {
+      const target = findSpecialParent("data-ul", event.target);
+      if (target == null) {
+        myMenu.style.display = "none";
+      }
+    });
+    /**end */
+
     //改变sortablejs参数
     screen.addEventListener("mousedown", (event) => {
       const target = findSpecialParent("data-target", event.target);
       if (target == null) {
-        this.sortableOptions = {
+        this.templateArrSortableOptions = {
           scroll: false,
           disabled: false,
           onUpdate: (event: any) => {
@@ -79,7 +160,7 @@ export class AppComponent {
           }
         };
       } else {
-        this.sortableOptions = {
+        this.templateArrSortableOptions = {
           scroll: false,
           disabled: true,
           onUpdate: (event: any) => {
@@ -207,6 +288,7 @@ export class AppComponent {
   }
   //组件数组处理
   handleData(event) {
+    //console.log("4.handleData")
     const target = event.target;
     //确定selectIndex，知道选中哪个组件
     const parent = findSpecialParent("data-unique", target);
@@ -234,8 +316,9 @@ export class AppComponent {
     }
     //重新绑定样式
     if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
+      const componentBox = findSpecialParent("data-index", target);
       const dom = document.getElementById("container-phone-screen").querySelectorAll("section").item(this.selectIndex);
-      dom.className = dom.className + " selected"
+      setSelectedClass("selected",dom, componentBox); //设置选中样式
     }
     this.defineButton();
   }
@@ -245,9 +328,17 @@ export class AppComponent {
     const index = this.selectIndex;
     let newHtml;
     if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
-      newHtml = this.templateArr[index].render(index);
+      if(this.selectIndex == index){
+        newHtml = this.templateArr[index].render(true);
+      }else{
+        newHtml = this.templateArr[index].render();
+      }
     } else if (this.selectPosition == constVar.CHOOSE_CONTENT) {
-      newHtml = this.templateArr[index].render(index, this.selectDataIndex);
+      if(this.selectIndex == index){
+        newHtml = this.templateArr[index].render(false, this.selectDataIndex);
+      }else{
+        newHtml = this.templateArr[index].render(false);
+      }
     }
     //字符串转为node
     const node = document.createElement("div");
@@ -262,11 +353,6 @@ export class AppComponent {
     }
     //重新绑定函数
     this.templateArr[index].bindFunc(index);
-    //重新绑定样式
-    if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
-      const dom = document.getElementById("container-phone-screen").querySelectorAll("section").item(this.selectIndex);
-      dom.className = dom.className + " selected"
-    }
     const timeEnd = new Date().getTime();
     console.log("重新渲染单个组件,共耗时：" + (timeEnd - timeStart) + "毫秒")
   }
@@ -290,7 +376,6 @@ export class AppComponent {
     }
 
   }
-
   //tempateArr自动渲染
   get templateArr() {
     return this._templateArr;
@@ -302,10 +387,20 @@ export class AppComponent {
     this.renderHtml = "";
     //渲染模板
     this._templateArr.forEach((item, index) => {
-      if (this.selectIndex == index && this.selectPosition == constVar.CHOOSE_CONTENT) {
-        this.renderHtml += item.render(index, this.selectDataIndex);
-      } else {
-        this.renderHtml += item.render(index);
+      if(this.selectPosition == constVar.CHOOSE_COMPONENT){
+        if(this.selectIndex == index){
+          this.renderHtml += item.render(true);
+        }else{
+          this.renderHtml += item.render(false);
+        }
+      }else if(this.selectPosition == constVar.CHOOSE_CONTENT){
+        if(this.selectIndex == index){
+          this.renderHtml += item.render(false,this.selectDataIndex);
+        }else{
+          this.renderHtml += item.render(false);
+        }
+      }else{
+        return ;
       }
     })
     screen.innerHTML = this.renderHtml;
@@ -313,13 +408,6 @@ export class AppComponent {
     this._templateArr.forEach((item, index) => {
       item.bindFunc();
     })
-    //selected样式绑定
-    if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
-      const dom = screen.querySelectorAll("section").item(this.selectIndex);
-      if (dom) {
-        dom.className = dom.className + " selected"
-      }
-    }
     const screenScrollHeight = screen.scrollHeight;
     screen.scrollTo(0, screenScrollHeight);
     const timeEnd = new Date().getTime();
@@ -389,21 +477,21 @@ export class AppComponent {
   //文件上传
   beforeUpload() {
     const pic = document.getElementById('pic');
-    console.log(pic);
+    //console.log(pic);
     pic.click();
   }
   upload(event) {
     const file = event.currentTarget.files[0];
-    console.log(file);
+    //console.log(file);
     const formData = new FormData();
     formData.append('imgFiles', file);
     this.http.post("http://k.21cn.com/api/publish/uploadUserPic.do", formData)
       .then(res => {
-        console.log(res)
+        //console.log(res)
         if (this.selectPosition == constVar.CHOOSE_COMPONENT) {
-          this.templateArr[this.selectIndex]['图片'] = res.list[0]["url"];
+          this.templateArr[this.selectIndex]['图标'] = res.list[0]["url"];
         } else {
-          this.templateArr[this.selectIndex]['data'][this.selectDataIndex]['图片'] = res.list[0]["url"];
+          this.templateArr[this.selectIndex]['data'][this.selectDataIndex]['图标'] = res.list[0]["url"];
         }
         this.renderComponent();
       })
@@ -411,4 +499,40 @@ export class AppComponent {
         console.log(res)
       })
   }
+
+  /**菜单栏拖到手机屏幕区域的拖动事件*/
+  drag(ev, id) {
+    this.dragTemplateId = id;
+  }
+  drop(ev) {
+    const nodeName = ev["srcElement"]["nodeName"].toLowerCase();
+    if (nodeName == "div") {
+      this.addComponent(this.dragTemplateId);
+      console.log(this.templateArr.length);
+    }
+  }
+  /*dropOverScreen(ev) {
+    const nodeName = ev["srcElement"]["nodeName"].toLowerCase();
+    if (nodeName == "div") {
+      const scrollTop = document.getElementById("container-phone-screen").scrollTop;
+      const clienY = ev.clienY;
+      const sectionList = document.getElementById("container-phone-screen").childNodes;
+      const mousePosition=screenTop-0+clienY;
+      //得出现在的高度，height=scrollTop+clientY，screen里面的section高度不断加，加到某个高度大于height，插入到这个section前面
+      let sum = screenTop;
+      for(let i in sectionList){
+        if(sectionList[i]["offsetHeight"]){
+            sum += sectionList[i]["offsetHeight"];
+            if(sum>mousePosition){
+              this.templateArr.splice(i,0,)
+            }
+        }
+      }
+      console.log(sum)
+    }
+  }*/
+  dragover(ev) {
+    ev.preventDefault();
+  }
+  /**end*/
 }

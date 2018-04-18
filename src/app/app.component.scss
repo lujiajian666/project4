@@ -18,16 +18,13 @@ $backgroundColor:#ececec;
 .container {
   background: white;
   height: 100vh;
-  border-left: 1px solid rgba(0,0,0,0.1);
-  &>div {
+  & div {
     position: relative;
     height: 100%;
-    &::after {
-      content: "";
-      border-right: 1px solid $dark;
-      @include position(10px, 0, 10px)
-    }
-    & .template-item {
+    overflow: hidden;
+    &.template-item {
+      width: 250px;
+      margin: 0 auto 30px auto;
       line-height: 30px;
       font-size: 17px;
       text-align: center;
@@ -88,7 +85,6 @@ $backgroundColor:#ececec;
   font-size: 15px;
   color: white;
   margin: 16px 28px 16px 0;
-  
 }
 
 .preview {
@@ -99,7 +95,7 @@ $backgroundColor:#ececec;
   right: 0;
   z-index: 10;
   margin: 0;
-  background:rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   & .container-phone {
     position: absolute;
     top: 20px;
@@ -111,9 +107,9 @@ $backgroundColor:#ececec;
     max-height: 700px;
     background: white;
   }
-  & .container-phone-screen{
+  & .container-phone-screen {
     width: 341px;
-    overflow:auto;
+    overflow: auto;
   }
 }
 
@@ -128,11 +124,13 @@ $backgroundColor:#ececec;
     font-weight: bolder;
   }
 }
-.h2{
+
+.h2 {
   text-align: center;
   line-height: 80px;
 }
-.flex{
+
+.flex {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,79 +1,184 @@
 /* You can add global styles to this file, and also import other style files */
-*{
-    padding: 0;
-    margin: 0;
-}
-a:link, a:visited,a:hover {
-    text-decoration:none;
-}	
-a:active {color: yellow}	/* 选定的链接，即鼠标按下去的时候不松开显示的状态 */
-body{
-    background: #ececec !important;
+
+* {
+  padding: 0;
+  margin: 0;
 }
 
-@mixin position($top:auto,$right:auto,$bottom:auto,$left:auto){
-    position: absolute;
-    top:$top;
-    right: $right;
-    bottom: $bottom;
-    left: $left;
+a:link,
+a:visited,
+a:hover {
+  text-decoration: none;
 }
-@mixin circle($length,$backgroundColor:inherit){
-    border-radius: 50%;
-    height: $length;
-    width: $length;
+
+a:active {
+  color: yellow
 }
-$dark:rgba(0,0,0,0.1);
-$wordsColor:rgba(0,0,0,0.5);
+
+/* 选定的链接，即鼠标按下去的时候不松开显示的状态 */
+
+body {
+  background: #ececec !important;
+}
+
+@mixin position($top:auto, $right:auto, $bottom:auto, $left:auto) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin circle($length, $backgroundColor:inherit) {
+  border-radius: 50%;
+  height: $length;
+  width: $length;
+}
+
+$dark:rgba(0, 0, 0, 0.1);
+$wordsColor:rgba(0, 0, 0, 0.5);
 $backgroundColor:#ececec;
-.ellipsis{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.selected{
-    border-color:  #49c;
-    box-sizing: border-box;
+
+.selected {
+  border-color: #49c;
+  box-sizing: border-box;
 }
-section{
-    padding: 10px !important;
-    box-sizing: border-box !important;
+
+section {
+  padding: 10px !important;
+  box-sizing: border-box !important;
 }
-/*菜单部件样式*/
-.menu-component{
-    display: block;
-    width: 321px;
-    height: 112px;
-    overflow: auto;
-    font-size: 0px;
-    background-color: white;
-    border:1px dashed transparent; 
-    & .item{
-        display: inline-block;
-        width: 20%;
-        height: 90px;
-        padding: 10px 0;
-        font-size: 14px;
-        border: 1px dashed transparent;
-        &>.pic{
-          display: block;
-          margin: auto;
-          background-size: 100% 100%;
-          @include circle(50px,$wordsColor);
-        }
-        &>.word{
-            @extend .ellipsis;
-            width: 100%;
-            padding-top: 5px;
-            text-align: center;
-            color: $wordsColor;
-        }
-        &.selected{
-           @extend .selected;
-        }
-    }
-    &.selected{
-        @extend .selected;
+
+/*鼠标右键样式*/
+
+.myMenu {
+  position: absolute;
+  display: none;
+  width: 150px;
+  background: white;
+  border: 1px solid #dde0e4;
+  box-shadow: 0 0 8px #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  list-style: none;
+  & li {
+    padding: 5px 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: #e6f7ff;
     }
   }
+}
 
+/*菜单部件样式*/
+
+.menu-component {
+  display: block;
+  width: 321px;
+  height: 112px;
+  overflow: auto;
+  font-size: 0px;
+  background-color: white;
+  border: 1px dashed transparent;
+  & ul{
+      display: flex;
+      justify-content: space-evenly;
+  }
+  & .item {
+    display: inline-block;
+    width: 20%;
+    height: 90px;
+    padding: 10px 0;
+    font-size: 14px;
+    border: 1px dashed transparent;
+    &>.pic {
+      display: block;
+      margin: auto;
+      background-size: 100% 100%;
+      @include circle(50px, $wordsColor);
+    }
+    &>.word {
+      @extend .ellipsis;
+      width: 100%;
+      padding-top: 5px;
+      text-align: center;
+      color: $wordsColor;
+    }
+    &.selected {
+      @extend .selected;
+    }
+  }
+  &.selected {
+    @extend .selected;
+  }
+}
+
+/*列表部件样式*/
+
+.list-component {
+  width: 321px;
+  background: white;
+  border: 1px dashed transparent;
+  &.selected {
+    @extend .selected;
+  }
+  & .item {
+    display: flex;
+    $height: 75px;
+    font-size: 0;
+    border: 1px dashed transparent;
+    align-items: center;
+    &.selected {
+      @extend .selected;
+    }
+    & .left {
+      display: inline-block;
+      height: $height;
+      vertical-align: top;
+      & .pic {
+        display: block;
+        height: 70px;
+        width: 60px;
+        margin: 2px 0 3px 0;
+        background-size: 100% 100%;
+      }
+    }
+    & .right {
+      display: inline-block;
+      padding-left: 20px;
+      font-size: 16px;
+      line-height: 25px;
+      & .title {
+          width: 210px;
+          @extend .ellipsis;
+          font-weight: bold;
+      }
+      & .sub-title {
+          width: 210px;
+          @extend .ellipsis;
+          font-size: 12px;
+      }
+      & .price {
+        & .original-price {
+            position: relative;
+            &::after{
+                content: "";
+                position: absolute;
+                top: 50%;
+                left:-5px;
+                right: -5px;
+                border: 1px solid red;
+            }
+        }
+        & .discount-price {
+            margin-left: 10px;
+        }
+      }
+    }
+  }
+}
