@@ -78,11 +78,12 @@ const objToArr = (obj) => {
   return arr;
 }
 interface baseComponent {
-  render(index,selectDataIndex);
-  preview(index);
+  render(isselected,selectDataIndex);
+  preview();
   bindFunc();
   setData(value);
-  getInstance(time);
+  getInstance();
+  hasPreviewAction();
   id;
   pic;
   name;

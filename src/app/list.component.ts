@@ -15,12 +15,12 @@ export class ListComponent implements baseComponent {
     value: "../assets/menu.png"
   };
   public data = [{
-      '标题': '我们需要什么样的文学观?',
-      '小标题': "21天系统化教你上手带团队",
-      '图标': "http://placehold.it/60x70",
-      '原价': 20,
-      '现价': 20,
-      '链接': ""
+    '标题': '请填写标题',
+    '小标题': "请填写小标题",
+    '图标': "http://placehold.it/60x70",
+    '原价': 20,
+    '现价': 20,
+    '链接': ""
     },
     /*{
       '标题': '日剧里的吃',
@@ -59,13 +59,15 @@ export class ListComponent implements baseComponent {
     value: 3
   };
   public constructor(time) {
-    this.timestamp = {
-      value: time
-    }
+    this.timestamp.value =  time
+    
   };
   public getInstance() {
     let time = new Date().getTime();
     return new ListComponent(time);
+  }
+  public hasPreviewAction() {
+    return false;
   }
   public render(isselect, selectDataIndex) {
     const data = this.data;

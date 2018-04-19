@@ -1,11 +1,13 @@
-import { ListComponent } from './list-component';
+import { element } from 'protractor';
+import { AdvertisementComponent } from './ad.component';
+import { ListComponent } from './list.component';
 import {
   Component,
   OnInit
 } from '@angular/core';
 import {
   MenuComponent,
-} from './menu-component'
+} from './menu.component'
 import {
   findSpecialParent,
   objToArr,
@@ -34,6 +36,7 @@ import {
  * data-ul     鼠标右键菜单显示的ul专有，配合findSpecialParent用来确定选区
  * data-target 组件内的内容专有，配合findSpecialParent用来确定选区
  * data-unique 组件专有，其值由组件内部的timestamp确定，用来唯一标识组件
+ * previewAction函数为组件内预览时需要绑定的函数
  */
 export class AppComponent {
   _templateArr = [];
@@ -41,6 +44,7 @@ export class AppComponent {
   template = [
     new MenuComponent(new Date().getTime()),
     new ListComponent(new Date().getTime()),
+    new AdvertisementComponent(new Date().getTime())
   ];
   renderHtml = '';
   previewHtml = '';
@@ -174,12 +178,12 @@ export class AppComponent {
   //增加组件
   addComponent(id) {
     this.template.forEach((item, index) => {
-      if (item.id == id) {
+      if (item.id.value == id.value) {
         this.templateArr.push(item.getInstance());
         this.selectIndex = this.templateArr.length - 1;
         this.selectPosition = constVar.CHOOSE_COMPONENT;
         document.getElementById("container-phone-screen")
-          .setAttribute("data-index", constVar.DATA_INDEX_OF_CHOOSE_COMPONENT.toString());
+                .setAttribute("data-index", constVar.DATA_INDEX_OF_CHOOSE_COMPONENT.toString());
         this.selectData = objToArr(this.templateArr[this.selectIndex]);
         this.templateArr = this.templateArr; //触发set重新渲染
       }
@@ -367,6 +371,11 @@ export class AppComponent {
         this.previewHtml += item.preview(index);
       })
       document.getElementById("previewHtml").innerHTML = this.previewHtml;
+      this.templateArr.forEach((item, index) => {
+        if(item.hasPreviewAction()){
+          item.previewAction();
+        }
+      })
     } else {
       document.getElementById("preview").style.display = "none";
       document.getElementById("previewHtml").innerHTML = this.previewHtml;

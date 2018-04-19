@@ -38,9 +38,7 @@ import {
       '链接': "",
     };
     public constructor(time) {
-      this.timestamp = {
-        value: time
-      }
+      this.timestamp.value = time
     };
     public render(isselect,selectDataIndex) {
       const data = this.data;
@@ -68,9 +66,12 @@ import {
       html += `</ul></section>`
       return html;
     };
-    public preview(index) {
+    public hasPreviewAction() {
+      return false;
+    }
+    public preview() {
       const data = this.data;
-      let html = `<section class='${this.className.value}'>`;
+      let html = `<section class='${this.className.value}'><ul>`;
       data.forEach((value) => {
         let pic = value["图标"] || "../assets/nobody.png";
         html += `<div class="item">`
@@ -82,7 +83,7 @@ import {
                  </div>
                 `
       })
-      html += `</section>`
+      html += `</ul></section>`
       return html;
     }
     public bindFunc() {

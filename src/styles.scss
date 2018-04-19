@@ -85,9 +85,9 @@ section {
   font-size: 0px;
   background-color: white;
   border: 1px dashed transparent;
-  & ul{
-      display: flex;
-      justify-content: space-evenly;
+  & ul {
+    display: flex;
+    justify-content: space-evenly;
   }
   & .item {
     display: inline-block;
@@ -121,6 +121,7 @@ section {
 /*列表部件样式*/
 
 .list-component {
+  min-height: 100px;
   width: 321px;
   background: white;
   border: 1px dashed transparent;
@@ -154,31 +155,83 @@ section {
       font-size: 16px;
       line-height: 25px;
       & .title {
-          width: 210px;
-          @extend .ellipsis;
-          font-weight: bold;
+        width: 210px;
+        @extend .ellipsis;
+        font-weight: bold;
       }
       & .sub-title {
-          width: 210px;
-          @extend .ellipsis;
-          font-size: 12px;
+        width: 210px;
+        @extend .ellipsis;
+        font-size: 12px;
       }
       & .price {
         & .original-price {
-            position: relative;
-            &::after{
-                content: "";
-                position: absolute;
-                top: 50%;
-                left:-5px;
-                right: -5px;
-                border: 1px solid red;
-            }
+          position: relative;
+          &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -5px;
+            right: -5px;
+            border: 1px solid red;
+          }
         }
         & .discount-price {
-            margin-left: 10px;
+          margin-left: 10px;
         }
       }
     }
+  }
+}
+
+/*广告部件样式*/
+
+.advertisement-component {
+  position: relative;
+  min-height: 100px;
+  width: 321px;
+  padding: 5px 0 !important;
+  background: white;
+  border: 1px dashed transparent;
+  overflow: hidden;
+  &.selected {
+    @extend .selected;
+  }
+  & .turn-left{
+    position: absolute;
+    left: 5px;
+    top: 40px;
+    font-size: 20px;
+  }
+  & .turn-right{
+    position: absolute;
+    right: 5px;
+    top: 40px;
+    font-size: 20px;
+  }
+  & .carousel {
+    width: 957px;
+    height: 90px;
+    overflow: hidden;
+    font-size: 0;
+    transition:0.5s;
+    & .item {
+      display: inline-block;
+      font-size: 0;
+      border: 1px dashed transparent;
+      overflow: hidden;
+      &.selected {
+        @extend .selected;
+      }
+      & img {
+        height: 88px;
+        width: 317px;
+      }
+    }
+  }
+}
+#previewHtml{
+  & .carousel{
+    transition:none;
   }
 }
