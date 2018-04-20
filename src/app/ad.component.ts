@@ -86,7 +86,7 @@ export class AdvertisementComponent implements baseComponent {
 
     data.forEach((value, index) => {
       let pic = value["图标"] || "../assets/nobody.png";
-      html += `<li class="item"><a href='${value['链接']}'><img src="${value['图标']}"></a></li>`
+      html += `<li class="item"><img draggable="false" data-href="${value['链接']}" src="${value['图标']}"></li>`
     })
     html += `</ul></section>`
     return html;
@@ -179,6 +179,13 @@ export class AdvertisementComponent implements baseComponent {
     const timestamp = this.timestamp.value;
     const ul = document.querySelector(`#previewHtml [data-unique='${timestamp}'] ul`);
     let startX;
+
+    $(ul).animate({
+      marginLeft: "-319px"
+    }, 1800, _ => {
+      $(ul).css("margin-left", 0);
+      $(">li:first", ul).appendTo(ul);
+    })
     let timer = setInterval(_ => {
       $(ul).animate({
         marginLeft: "-319px"
@@ -188,7 +195,7 @@ export class AdvertisementComponent implements baseComponent {
       })
     }, 3000)
     /*手机滑动函数*/
-    $(ul).on("touchstart", function (e) {
+    $(" img",ul).on("touchstart", function (e) {
       // 判断默认行为是否可以被禁用
       if (e.cancelable) {
         // 判断默认行为是否已经被禁用
@@ -198,7 +205,7 @@ export class AdvertisementComponent implements baseComponent {
       }
       startX = e.originalEvent.changedTouches[0].pageX
     })
-    $(ul).on("touchend", function (e) {
+    $(" img",ul).on("touchend", function (e) {
       // 判断默认行为是否可以被禁用
       if (e.cancelable) {
         // 判断默认行为是否已经被禁用
@@ -218,18 +225,51 @@ export class AdvertisementComponent implements baseComponent {
       } 
     })
     /*电脑滑动函数*/ 
-    $(ul).on("mousedown",function(e){
+    $(" img",ul).on("mousedown",function(e){
       let ev = e || window.event;
       startX = e.clientX;
+      console.log(startX);
     })
-    $(ul).on("mouseup",function(e){
+    $(" img",ul).on("mouseup",function(e){
       let ev = e || window.event;
       let endX = ev.clientX;
       let X    = endX-startX;
-      if(X>50){
-        alert("向右滑动")
-      }else if(X<-50){
-        alert("向左滑动")
+      console.log(endX)
+      if(X<-30){
+        clearInterval(timer);
+        $(ul).stop(true,true).animate({
+          marginLeft: "-319px"
+        }, 500, _ => {
+          $(ul).css("margin-left", 0);
+          $(">li:first", ul).appendTo(ul);
+        })
+        timer = setInterval(_ => {
+          $(ul).animate({
+            marginLeft: "-319px"
+          }, 1800, _ => {
+            $(ul).css("margin-left", 0);
+            $(">li:first", ul).appendTo(ul);
+          })
+        }, 3000);
+        console.log("right")        
+      }else if(X>30){
+        clearInterval(timer);
+        $(ul).stop(true,true);
+        $(">li:last", ul).prependTo(ul);
+        $(ul).css("margin-left","-319px").animate({
+          marginLeft: "0px"
+        }, 500)
+        timer = setInterval(_ => {
+          $(ul).animate({
+            marginLeft: "-319px"
+          }, 1800, _ => {
+            $(ul).css("margin-left", 0);
+            $(">li:first", ul).appendTo(ul);
+          })
+        }, 3000);
+        console.log("left")
+      }else{
+        window.document.location.href=$(this).attr("data-href");
       }
     })
     /*let turnRight=()=>{
