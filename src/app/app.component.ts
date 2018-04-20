@@ -93,8 +93,10 @@ export class AppComponent {
       } else if (action == "delete") {
         this.delete();
       } else if (action == "add") {
-        this.add();
-      } else {
+        this.add(); 
+      } else if(action == "chooseParent"){
+        this.chooseParent();
+      }else {
         return;
       }
       myMenu.style.display = "none";
@@ -133,6 +135,7 @@ export class AppComponent {
         if (this.buttonDelete) {
           menuContent += `<li id='delete'>删除</li>`;
         }
+        menuContent += `<li id="chooseParent">选择父元素</li>`
       } else {
         return;
       }
@@ -189,6 +192,11 @@ export class AppComponent {
       }
     });
     this.defineButton();
+  }
+  //从组件内容选中组件本身
+  chooseParent(){
+    let $ =window["$"];
+    $(`>section:nth-of-type(${this.selectIndex+1})`,"#container-phone-screen").click();
   }
   //上移
   positionUp() {
