@@ -42,7 +42,7 @@ export class AdvertisementComponent implements baseComponent {
     next: "右移"
   }
   public maxChildrenNum = {
-    value: 3
+    value: 5
   };
   constructor(time) {
     this.timestamp.value = time
@@ -50,16 +50,19 @@ export class AdvertisementComponent implements baseComponent {
   public render(isselected: any, selectDataIndex: any) {
     const data = this.data;
     let html = "";
+    if(this.prevSelectDataIndex.value > this.data.length-1 ){//说明之前选择的项被删除了，不能选这个了
+       this.prevSelectDataIndex.value = 0;
+    }
     if (isselected) {
       html = `<section class='${this.className.value} selected'  data-unique='${this.timestamp.value}'> 
               <i class="anticon anticon-right-circle-o turn-right"></i>
               <i class="anticon anticon-left-circle-o turn-left"></i>
-              <ul class="carousel"  style='margin-left:${-this.prevSelectDataIndex.value*319+'px'}' >`;
+              <ul class="carousel"  style='width:${319*this.data.length+"px"};margin-left:${-this.prevSelectDataIndex.value*319+'px'}' >`;
     } else {
       html = `<section class='${this.className.value}'  data-unique='${this.timestamp.value}'>
               <i class="anticon anticon-right-circle-o turn-right"></i>
               <i class="anticon anticon-left-circle-o turn-left"></i>
-              <ul class="carousel" style='margin-left:${-this.prevSelectDataIndex.value*319+'px'}' data-position='${selectDataIndex}'>`;
+              <ul class="carousel" style='width:${319*this.data.length+"px"};margin-left:${-this.prevSelectDataIndex.value*319+'px'}' data-position='${selectDataIndex}'>`;
 
     }
     if (selectDataIndex) {
@@ -81,9 +84,7 @@ export class AdvertisementComponent implements baseComponent {
     const data = this.data;
     let html = "";
     html = `<section class='${this.className.value}'  data-unique='${this.timestamp.value}'>
-            <div class="overlay"></div>  
-            <ul class="carousel">`;
-
+            <ul class="carousel" style="width:${319*this.data.length+"px"}">`;
     data.forEach((value, index) => {
       let pic = value["图标"] || "../assets/nobody.png";
       html += `<li class="item"><img draggable="false" data-href="${value['链接']}" src="${value['图标']}"></li>`
@@ -124,16 +125,24 @@ export class AdvertisementComponent implements baseComponent {
     const prevButton = document.querySelector(`[data-unique='${this.timestamp.value}'] .turn-left`)
     const nextButton = document.querySelector(`[data-unique='${this.timestamp.value}'] .turn-right`)
     const ul = document.querySelector(`[data-unique='${this.timestamp.value}'] ul`)
+    const leftBound = -319;
+    const rightBound = -319*(this.data.length-1);
     const margin = ul["style"].marginLeft.replace("px", "") - 0;
-    if (margin > -319) {
+    if(this.data.length==0){
+      nextButton["style"].display = "none";
+      prevButton["style"].display = "none";
+    }else if (margin > leftBound) {
       prevButton["style"].display = "none";
       nextButton["style"].display = "block";
-    } else if (margin <= -638) {
+    } else if (margin <= rightBound) {
       nextButton["style"].display = "none";
       prevButton["style"].display = "block";
     } else {
       nextButton["style"].display = "block";
       prevButton["style"].display = "block";
+    }
+    if(this.data.length <2){
+      nextButton["style"].display = "none";
     }
     prevButton.addEventListener('click', event => {
       const ev = event || window.event;
@@ -141,15 +150,22 @@ export class AdvertisementComponent implements baseComponent {
       const margin = ul["style"].marginLeft.replace("px", "") - 0;
       const m = margin - 0 + 319;
       ul["style"].marginLeft = m + "px";
-      if (m > -319) {
+      
+      if(this.data.length==0){
+        nextButton["style"].display = "none";
+        prevButton["style"].display = "none";
+      }else if (m > leftBound) {
         prevButton["style"].display = "none";
         nextButton["style"].display = "block";
-      } else if (m < -638) {
+      } else if (m < rightBound) {
         nextButton["style"].display = "none";
         prevButton["style"].display = "block";
       } else {
         nextButton["style"].display = "block";
         prevButton["style"].display = "block";
+      }
+      if(this.data.length <2){
+        nextButton["style"].display = "none";
       }
     })
     nextButton.addEventListener('click', event => {
@@ -159,15 +175,21 @@ export class AdvertisementComponent implements baseComponent {
       const margin = ul["style"].marginLeft.replace("px", "") - 0;
       const m = margin - 319;
       ul["style"].marginLeft = m + "px";
-      if (m > -319) {
+      if(this.data.length==0){
+        nextButton["style"].display = "none";
+        prevButton["style"].display = "none";
+      }else if (m > leftBound) {
         prevButton["style"].display = "none";
         nextButton["style"].display = "block";
-      } else if (m <= -638) {
+      } else if (m <= rightBound) {
         nextButton["style"].display = "none";
         prevButton["style"].display = "block";
       } else {
         nextButton["style"].display = "block";
         prevButton["style"].display = "block";
+      }
+      if(this.data.length <2){
+        nextButton["style"].display = "none";
       }
     })
   }
@@ -282,23 +304,6 @@ export class AdvertisementComponent implements baseComponent {
       }, 500)
     }
     turnRight();*/
-  }
-  public buttonShow() {
-    const prevButton = document.querySelector(`[data-unique='${this.timestamp.value}'] .turn-left`)
-    const nextButton = document.querySelector(`[data-unique='${this.timestamp.value}'] .turn-right`)
-    const ul = document.querySelector(`[data-unique='${this.timestamp.value}'] ul`)
-    const margin = ul["style"].marginLeft.replace("px", "") - 0;
-    const m = margin - 319;
-    if (m > -319) {
-      prevButton["style"].display = "none";
-      nextButton["style"].display = "block";
-    } else if (m < -638) {
-      nextButton["style"].display = "none";
-      prevButton["style"].display = "block";
-    } else {
-      nextButton["style"].display = "block";
-      prevButton["style"].display = "block";
-    }
   }
   public setData(value: any) {;
   }
