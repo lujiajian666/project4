@@ -520,7 +520,8 @@ export class AppComponent {
       console.log(this.templateArr.length);
     }
   }
-  /*dropOverScreen(ev) {
+  /*drapOverScreen(ev) {
+    const $ = window["$"];
     const nodeName = ev["srcElement"]["nodeName"].toLowerCase();
     if (nodeName == "div") {
       const scrollTop = document.getElementById("container-phone-screen").scrollTop;
@@ -533,7 +534,8 @@ export class AppComponent {
         if(sectionList[i]["offsetHeight"]){
             sum += sectionList[i]["offsetHeight"];
             if(sum>mousePosition){
-              this.templateArr.splice(i,0,)
+              //往后退空位置出来
+              $(sectionList[i]).css("margin-top","50px");
             }
         }
       }
