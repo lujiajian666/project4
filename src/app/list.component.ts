@@ -155,6 +155,9 @@ export class ListComponent implements baseComponent {
     //内容拖拽
     window["Sortable"].create(node.childNodes.item(0), {
       scroll: false,
+      onStart : (event:any)=>{
+        screen.setAttribute("data-draggable-src","sortable")
+      },
       onUpdate: (event: any) => {
         let data = this.data;
         let temp = data[event.oldIndex];
