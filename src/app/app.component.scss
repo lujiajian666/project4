@@ -1,0 +1,137 @@
+@mixin position($top:auto, $right:auto, $bottom:auto, $left:auto) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin circle($length, $backgroundColor:inherit) {
+  border-radius: 50%;
+  height: $length;
+  width: $length;
+}
+
+$dark:rgba(0, 0, 0, 0.1);
+$wordsColor:rgba(0, 0, 0, 0.5);
+$backgroundColor:#ececec;
+.container {
+  background: white;
+  height: 100vh;
+  & div {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    &.template-item {
+      width: 250px;
+      margin: 0 auto 30px auto;
+      line-height: 30px;
+      font-size: 17px;
+      text-align: center;
+      color: $wordsColor;
+      &>img {
+        width: 80%;
+      }
+    }
+  }
+  & .container-phone {
+    margin: auto;
+    min-height: 400px;
+    max-height: 700px;
+    height: 90%;
+    width: 325px;
+    border-radius: 20px/14px;
+    border: $wordsColor solid 1px;
+    overflow: hidden;
+    &>.container-phone-screen {
+      width: 341px;
+      height: 95%;
+      margin-top: 5%;
+      border: 1px solid $dark;
+      background-color: $backgroundColor;
+      overflow: auto;
+    }
+  }
+  & .container-data {
+    padding: 10px
+  }
+}
+
+.data-block {
+  padding: 5px;
+  &>div {
+    margin-bottom: 5px
+  }
+}
+
+.align-center {
+  text-align: center
+}
+
+.ant-layout-sider {
+  flex: 0 0 400px !important;
+  background: white !important;
+}
+
+.title {
+  text-align: right;
+  line-height: 28px;
+}
+
+.logo {
+  float: left;
+  height: 31px;
+  line-height: 31px;
+  font-size: 15px;
+  color: white;
+  margin: 16px 28px 16px 0;
+}
+
+.preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.5);
+  & .container-phone {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    bottom: 20px;
+    right: 0;
+    margin: auto;
+    width: 325px;
+    max-height: 700px;
+    background: white;
+  }
+  & .container-phone-screen {
+    width: 341px;
+    overflow: auto;
+  }
+}
+
+.preview-button {
+  position: relative;
+  float: right;
+  line-height: 64px;
+  color: white;
+  cursor: pointer;
+  z-index: 11;
+  &:hover {
+    font-weight: bolder;
+  }
+}
+
+.h2 {
+  text-align: center;
+  line-height: 80px;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
